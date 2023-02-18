@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+  const token = jwt.sign({ id: user._id, email:user.email }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
 
@@ -53,8 +53,17 @@ router.post("/login", async (req, res) => {
 });
 
 // Logout
-router.get("/logout",(req,res)=>{
-  
+router.post("/logout",(req,res)=>{
+  console.log(req.headers.token)
+  token = jwt.verify(req.headers.token,process.env.JWT_SECRET_KEY,(err,decoded)=>{
+    if(err){
+      console.log(err)
+      return res.send(err)
+    }
+    
+  })
+  // console.log(token);
+  res.send("logout route")
 })
 
 
